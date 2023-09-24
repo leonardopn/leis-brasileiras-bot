@@ -25,7 +25,7 @@ export class SingletonTelegramBot extends TelegramBot {
 export function startBot() {
     const bot = SingletonTelegramBot.getInstance();
 
-    bot.on("message", async (msg) => {
+    bot.on("text", async (msg) => {
         try {
             const filePath = path.join(__dirname, "..", "..", "temp", `${v4()}.pdf`);
             const isCompleted = await downloadPlanaltoLaw(msg.text || "", filePath, msg.chat.id);

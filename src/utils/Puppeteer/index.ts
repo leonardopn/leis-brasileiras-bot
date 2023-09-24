@@ -21,7 +21,7 @@ export async function searchALawLinkInPage(page: Page, law: string, chatId: numb
     try {
         logging(`Buscando lei: ${law}`, chatId);
 
-        await page.goto(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(`lei ${law}`)}`);
+        await page.goto(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(`site:planalto.gov.br ${law}`)}`);
         await page.waitForSelector("a.result__url");
 
         const resultUrl = await page.evaluate(() => {

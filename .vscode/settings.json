@@ -1,3 +1,3 @@
 {
-    "conventionalCommits.scopes": ["Service: Api", "Service: TelegramBot"]
+    "conventionalCommits.scopes": ["Service: Api", "Service: TelegramBot", "Service: Puppeteer"]
 }

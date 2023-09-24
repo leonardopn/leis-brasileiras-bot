@@ -1,20 +1,26 @@
 import { Page } from "puppeteer";
 import { newBrowserInstance } from "../../service/Puppeteer";
+import { logging } from "../logger";
 
-export async function downloadPagePdf(page: Page, filePath: string) {
+export async function downloadPagePdf(page: Page, filePath: string, chatId: number) {
     try {
-        console.log("Baixando o pdf da página...");
+        logging("Baixando o pdf da página...", chatId);
+
         await page.pdf({ path: filePath, format: "A4" });
-        console.log(`O site foi salvo como ${filePath}`);
+
+        logging("Download completo!", chatId);
+
+        logging(`O site foi salvo como ${filePath}`);
     } catch (error) {
-        console.error("Erro ao salvar o site como PDF:", error);
+        logging(`Erro ao salvar o site como PDF: ${error}`);
         throw error;
     }
 }
 
-export async function searchALawLinkInPage(page: Page, law: string) {
+export async function searchALawLinkInPage(page: Page, law: string, chatId: number) {
     try {
-        console.log(`Buscando lei: ${law}`);
+        logging(`Buscando lei: ${law}`, chatId);
+
         await page.goto(`https://html.duckduckgo.com/html/?q=${encodeURIComponent(`lei ${law}`)}`);
         await page.waitForSelector("a.result__url");
 
@@ -25,28 +31,29 @@ export async function searchALawLinkInPage(page: Page, law: string) {
 
         return resultUrl;
     } catch (error) {
-        console.error(`Erro ao buscar lei ${law}`, error);
+        logging(`Erro ao buscar lei ${law}: ${error}`);
+
         throw error;
     }
 }
 
-export async function downloadPlanaltoLaw(law: string, pathToSavePdf: string) {
+export async function downloadPlanaltoLaw(law: string, pathToSavePdf: string, chatId: number) {
     const browser = await newBrowserInstance();
     const page = await browser.newPage();
 
     try {
-        const resultUrl = await searchALawLinkInPage(page, law);
+        const resultUrl = await searchALawLinkInPage(page, law, chatId);
 
         if (resultUrl && resultUrl.includes("planalto.gov.br")) {
             await page.goto(resultUrl, { waitUntil: "networkidle2" });
-            await downloadPagePdf(page, pathToSavePdf);
+            await downloadPagePdf(page, pathToSavePdf, chatId);
             return true;
         } else {
-            console.log("Lei não localizada");
+            logging("Lei não localizada. Tente melhorar sua busca.", chatId);
             return false;
         }
     } catch (error) {
-        console.error(`Erro na operação total de download da lei ${law}:`, error);
+        logging(`Erro na operação total de download da lei ${law}: ${error}`);
         throw error;
     } finally {
         await browser.close();

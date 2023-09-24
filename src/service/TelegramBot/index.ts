@@ -3,6 +3,7 @@ import TelegramBot from "node-telegram-bot-api";
 import path from "path";
 import { v4 } from "uuid";
 import { downloadPlanaltoLaw } from "../../utils/Puppeteer";
+import { logging } from "../../utils/logger";
 
 export class SingletonTelegramBot extends TelegramBot {
     private static instance: SingletonTelegramBot;
@@ -23,6 +24,7 @@ export class SingletonTelegramBot extends TelegramBot {
 }
 
 export function startBot() {
+    let errorCount = 0;
     const bot = SingletonTelegramBot.getInstance();
 
     bot.on("text", async (msg) => {
@@ -44,5 +46,22 @@ export function startBot() {
                 "Tivemos um problema para processar sua operação. Tente novamente mais tarde."
             );
         }
+    });
+
+    bot.on("polling_error", async (error) => {
+        errorCount += 1;
+        logging(`Um erro correu durante o polling: ${error}`);
+
+        if (errorCount === 10) {
+            errorCount = 0;
+            logging("Muitos erros de polling ocorreram, vamos aguardar 3 minutos e tentaremos novamente.");
+            bot.stopPolling();
+            setTimeout(() => bot.startPolling({ polling: true }), 180000); //NOTE: 3 minutos
+        }
+    });
+
+    bot.on("error", async (error) => {
+        logging(`Um erro critico aconteceu reinicie o sistema: ${error}`);
+        process.exit(1);
     });
 }

@@ -8,6 +8,7 @@
     "private": true,
     "scripts": {
         "start:dev": "nodemon",
+        "start:prod": "node ./dist/index.js",
         "build": "./scripts/build.sh"
     },
     "dependencies": {

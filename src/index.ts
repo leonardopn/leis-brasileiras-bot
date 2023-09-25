@@ -5,7 +5,7 @@ import { logging } from "./utils/logger";
 
 startBot();
 
-if (process.env.STOP_APP) {
+if (Number(process.env.STOP_APP)) {
     logging("Sistema foi solicitado a desligar.");
     process.exit(0);
 }

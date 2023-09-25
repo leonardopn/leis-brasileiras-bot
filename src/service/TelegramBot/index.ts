@@ -51,6 +51,7 @@ export function startBot() {
                 );
             }
         } catch (error) {
+            logging(`Um erro correu durante o recebimento da mensagem: ${error}`);
             bot.sendMessage(
                 msg.chat.id,
                 "Tivemos um problema para processar sua operação. Tente novamente mais tarde."

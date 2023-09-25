@@ -12,8 +12,9 @@ fastify.get("/", async function handler() {
 
 export async function startApiServer() {
     try {
-        logging("API iniciada na porta 8080.");
-        await fastify.listen({ port: 8080 });
+        const port = process.env.PORT || 8080;
+        logging(`API iniciada na porta ${port}.`);
+        await fastify.listen({ port });
     } catch (err) {
         logging(`Erro na API: ${err}`);
         fastify.log.error(err);

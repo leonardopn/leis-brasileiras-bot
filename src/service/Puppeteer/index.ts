@@ -5,7 +5,7 @@ export async function newBrowserInstance() {
     const browser = await puppeteer.launch({
         args: chromium.args,
         defaultViewport: chromium.defaultViewport,
-        executablePath: await chromium.executablePath("/opt/chromium"),
+        executablePath: await chromium.executablePath(),
         headless: chromium.headless,
     });
     return browser;

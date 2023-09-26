@@ -18,11 +18,12 @@
         "fastify": "^4.23.2",
         "node-cron": "^3.0.2",
         "node-telegram-bot-api": "^0.63.0",
-        "puppeteer": "^21.3.4",
+        "puppeteer-core": "^21.3.4",
         "uuid": "^9.0.1",
         "zod": "^3.22.2"
     },
     "devDependencies": {
+        "@sparticuz/chromium-min": "117",
         "@types/node": "^20.6.4",
         "@types/node-cron": "^3.0.9",
         "@types/node-telegram-bot-api": "^0.61.7",

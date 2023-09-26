@@ -1,4 +1,4 @@
-import { Page } from "puppeteer";
+import { Page } from "puppeteer-core";
 import { newBrowserInstance } from "../../service/Puppeteer";
 import { logging } from "../logger";
 
@@ -56,6 +56,7 @@ export async function downloadPlanaltoLaw(law: string, pathToSavePdf: string, ch
         logging(`Erro na operação total de download da lei ${law}: ${error}`);
         throw error;
     } finally {
-        await browser.close();
+        //FIX: Por algum motivo, está travando o app
+        browser.close();
     }
 }
